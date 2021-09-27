@@ -1,0 +1,89 @@
+---
+title: "p8105_hw1_xz2981"
+author: "Xinyan Zhou"
+date: "2021/9/25"
+output: github_document
+---
+
+```{r}
+library(tidyverse)
+library(palmerpenguins)
+```
+
+
+# Problem 1
+
+## Create the dataframe
+```{r}
+data_p1 <- tibble(
+  norm_samp = rnorm(10,0,1),
+  var_logic = norm_samp > 0,
+  var_char = "maple glazed donuts",
+  var_factor = factor(c("low","low","medium","medium","high","high",
+                         "high","high","high","high"))
+)
+print(data_p1)
+```
+
+## Take the mean
+
+The following variables can work:
+```{r}
+mean(pull(data_p1,norm_samp))
+mean(pull(data_p1,var_logic))
+```
+
+The following variables cannot work:
+```{r}
+# mean(pull(data_p1,var_char))
+# mean(pull(data_p1,var_factor))
+```
+
+When we explicitly convert variables from one type to another, we can take the mean for the following two variables: 
+```{r eval = FALSE}
+mean(as.numeric(pull(data_p1,var_logic)))
+mean(as.numeric(pull(data_p1,var_factor)))
+```
+
+Even after converting, we cannot take the mean for var_char.
+```{r eval = FALSE}
+# mean(as.numeric(pull(data_p1,var_char)))
+```
+
+
+# Problem 2
+
+## Load the dataset
+```{r}
+data("penguins", package = "palmerpenguins")
+summary(penguins)
+nrow(penguins)
+ncol(penguins)
+mean(pull(penguins,flipper_length_mm),na.rm = TRUE)
+```
+
+This dataset has 8 variables:
+species, factor, three levels-"Adelie","Chinstrap","Gentoo";
+island, factor, three levels-"Biscoe","Dream", "Torgersen";
+bill_length_mm, numeric, from 32.10 to 59.60, with 2 missing values;
+bill_depth_mm, numeric, from 13.10 to 21.50, with 2 missing values;
+flipper_length_mm, integer, from 172 to 231, with 2 missing values;
+body_mass_g, integer, from 2700 to 6300, with 2 missing values;
+sex, factor, 2 levels-"female","male",with 11 missing values;
+year, integer, from 2007 to 2009.
+
+The row of the data is 344, and the column is 8.
+
+The mean of flipper length is 200.9152.
+
+## Scatterplot
+
+```{r warning = FALSE, message = FALSE}
+penguins %>%
+  ggplot(aes(flipper_length_mm,bill_length_mm)) + 
+  geom_point(alpha = 0.5, size = 2, aes(color = species)) 
+
+ggsave("penguins.pdf")
+```
+
+
