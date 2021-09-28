@@ -18,7 +18,8 @@ library(palmerpenguins)
 data_p1 <- tibble(
   norm_samp = rnorm(10,0,1),
   var_logic = norm_samp > 0,
-  var_char = "maple glazed donuts",
+  var_char = c("maple","glazed","donuts","original","glazed","donuts",
+               "cinnamon","roll","cheese","cake"),
   var_factor = factor(c("low","low","medium","medium","high","high",
                          "high","high","high","high"))
 )
@@ -34,9 +35,9 @@ mean(pull(data_p1,var_logic))
 ```
 
 The following variables cannot work:
-```{r}
-# mean(pull(data_p1,var_char))
-# mean(pull(data_p1,var_factor))
+```{r eval = FALSE}
+mean(pull(data_p1,var_char))
+mean(pull(data_p1,var_factor))
 ```
 
 When we explicitly convert variables from one type to another, we can take the mean for the following two variables: 
@@ -47,7 +48,7 @@ mean(as.numeric(pull(data_p1,var_factor)))
 
 Even after converting, we cannot take the mean for var_char.
 ```{r eval = FALSE}
-# mean(as.numeric(pull(data_p1,var_char)))
+mean(as.numeric(pull(data_p1,var_char)))
 ```
 
 
@@ -80,8 +81,8 @@ The mean of flipper length is 200.9152.
 
 ```{r warning = FALSE, message = FALSE}
 penguins %>%
-  ggplot(aes(flipper_length_mm,bill_length_mm)) + 
-  geom_point(alpha = 0.5, size = 2, aes(color = species)) 
+  ggplot(aes(flipper_length_mm,bill_length_mm,color = species)) + 
+  geom_point(alpha = 0.5, size = 2) 
 
 ggsave("penguins.pdf")
 ```
